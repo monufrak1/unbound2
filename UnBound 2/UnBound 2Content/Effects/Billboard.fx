@@ -1,5 +1,4 @@
 // Billboard.fx
-
 #include "Lighthelper.fx"
 
 #define ALPHA_MASK 0.5f
