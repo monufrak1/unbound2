@@ -8,7 +8,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Matt\Documents\Programming\Xna\Projects\UnBound 2\UnBound 2\UnBound 2\bin\x86\Debug\Content\Effects\Billboard.xnb</Output>
-      <Time>2014-10-08T18:39:12.2507136-04:00</Time>
+      <Time>2014-10-19T17:57:53.2141471-04:00</Time>
       <Dependency>
         <Key>Effects\Lighthelper.fx</Key>
         <Value>2013-05-12T16:59:13.7992423-04:00</Value>
@@ -87,7 +87,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Matt\Documents\Programming\Xna\Projects\UnBound 2\UnBound 2\UnBound 2\bin\x86\Debug\Content\Effects\Terrain.xnb</Output>
-      <Time>2013-05-12T16:59:13.9642425-04:00</Time>
+      <Time>2014-10-11T14:52:19.9302547-04:00</Time>
       <Dependency>
         <Key>Effects\Lighthelper.fx</Key>
         <Value>2013-05-12T16:59:13.7992423-04:00</Value>

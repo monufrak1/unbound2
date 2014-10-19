@@ -65,8 +65,8 @@ BillboardPS_IN BillboardVS(BillboardVS_IN vIn)
 	vOut.posW = mul(float4(vIn.posL, 1.0f), g_World);
 
 	// Add wind
-	if(vIn.posL.y > 0.0f && g_WindEnabled) 
-		vIn.posL.x += cos(sin(g_Time * 0.01f) * vOut.posW.z) * 0.5f;
+	if(vIn.posL.y > 0.0f && g_WindEnabled)
+		vIn.posL.x += sin(g_Time + vOut.posW.z);
 
 	vOut.posH = mul(float4(vIn.posL, 1.0f), WVP);
 
