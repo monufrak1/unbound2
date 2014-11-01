@@ -156,7 +156,7 @@ float4 SkyTexturedPS(SkyTexturedPS_IN pIn) : SV_TARGET
 	if(pIn.dirW.y < 0.995f)
 	{
 		return lerp(skyColor, texColor,
-			saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz) - 0.25f));
+			saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz)));
 	}
 
 	return skyColor;
@@ -180,7 +180,7 @@ float4 SkyTexturedCloudsPS(SkyTexturedPS_IN pIn) : SV_TARGET
 		float3 litColor = DirectionalLight(v, light, g_EyePosW, 1.0f);
 
 		skyColor = lerp(skyColor, float4(litColor, texColor.a),
-				saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz) - 0.25f));
+				saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz)));
 
 		// Clouds have occlusion
 		skyColor.a = 1.0f;
@@ -200,7 +200,7 @@ float4 SkyTexturedOcclusionPS(SkyTexturedPS_IN pIn) : SV_TARGET
 	float4 texColor = tex2D(g_SkyTextureSampler, pIn.tex);
 	
 	clip(texColor.a - 0.45f);
-	clip((saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz) - 0.25f)) - 0.05f);
+	clip((saturate(dot(float3(0.0f, 1.0f, 0.0f), pIn.dirW.xyz))) - 0.05f);
 
 	return float4(0.0f, 0.0f, 0.0f, 1.0f);
 } // end SkyTexturedOcclusionPS

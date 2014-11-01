@@ -59,10 +59,11 @@ namespace GameStateManagement
         WaterRenderer waterRenderer;
         BillboardRenderer billboardRenderer;
         MeshRenderer meshRenderer;
+        OrbRenderer orbRenderer;
 
         // Level
         string levelFileName;
-        Level level;
+        UnboundLevel level;
 
         public BackgroundScreen()
             : base()
@@ -87,7 +88,7 @@ namespace GameStateManagement
 
         public override void UnloadContent()
         {
-            level.AmbientSFX.Stop();
+            level.StopAudio();
         }
 
         private void Initialize()
@@ -129,6 +130,8 @@ namespace GameStateManagement
                 content.Load<Effect>(@"Effects\Billboard"));
             meshRenderer = new MeshRenderer(graphicsDevice,
                 content.Load<Effect>(@"Effects\Mesh"));
+            orbRenderer = new OrbRenderer(graphicsDevice,
+                content.Load<Effect>(@"Effects\Orb"));
 
             // Create camera
             camera = new FirstPersonCamera();
@@ -149,7 +152,7 @@ namespace GameStateManagement
         private void LoadLevel(string levelFileName)
         {
             // Load level
-            level = new Level(graphicsDevice, content, levelFileName);
+            level = new UnboundLevel(graphicsDevice, content, levelFileName);
 
             camera.Position = level.CameraStartPosition;
             camera.Look = level.CameraStartDirection;
@@ -168,7 +171,8 @@ namespace GameStateManagement
             // Create sound players
             level.AmbientSFX.Play();
 
-            // Set initial effect parameters
+            level.DayNightCycleSpeed = 0.1f;
+
             // Set initial effect parameters
             SharedEffectParameters.xProjectionMatrix = camera.Projection;
             SharedEffectParameters.xReflectionProjectionMatrix = camera.Projection;
@@ -198,14 +202,19 @@ namespace GameStateManagement
             UpdateGame(gameTime);
         }
 
+        Vector3 offsetVec = new Vector3(1000.0f, 600.0f, 1000.0f);
         private void UpdateGame(GameTime gameTime)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Rotate camera around level
+            camera.Position = Vector3.Transform(level.CameraStartPosition + offsetVec,
+                Matrix.CreateRotationY((float)gameTime.TotalGameTime.TotalSeconds / 20));
+            camera.Look = Vector3.Subtract(Vector3.Zero, camera.Position);
+
             level.Update(camera, dt);
 
             // Update effect parameters
-            // Update effect variables
             SharedEffectParameters.xTime = (float)gameTime.TotalGameTime.TotalSeconds;
             SharedEffectParameters.xEyePosW = camera.Position;
             SharedEffectParameters.xEyeDirection = camera.Look;
@@ -364,6 +373,18 @@ namespace GameStateManagement
             {
                 waterRenderer.Draw(level.Water, reflectionRT, mainRT);
             }
+
+            orbRenderer.CreateRefractionMap(mainRT);
+            foreach (Orb orb in level.OrbList)
+            {
+                if (viewFrustum.Intersects(orb.BoundingSphere))
+                {
+                    orbRenderer.DrawWithRefraction(orb);
+                }
+            }
+
+            // Draw particles
+            level.DrawParticleEffects(camera);
 
             // Draw post processing
             if (postProcessingEffectsEnabled)

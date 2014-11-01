@@ -135,6 +135,7 @@ namespace GameObjects
 
         public void StopAudio()
         {
+            AmbientSFX.Stop();
             secretOrbSFX.Stop();
         }
 
