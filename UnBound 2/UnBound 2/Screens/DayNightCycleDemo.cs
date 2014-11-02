@@ -108,9 +108,6 @@ namespace GameStateManagement
         {
             // Stop music and sound effects
             MediaPlayer.Stop();
-            level.AmbientSFX.Stop();
-            level.WeatherSFX.Stop();
-            level.WaterSFX.Stop();
             level.StopAudio();
         }
 

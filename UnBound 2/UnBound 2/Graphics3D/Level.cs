@@ -87,6 +87,8 @@ namespace Graphics3D
         protected int numRainParticlesToEmit;
         protected int maxParticles;
         protected bool rainEnabled;
+        protected float rainInterval;
+        protected float rainIntervalTimer;
         protected float rainTimer;
         protected float rainDelta;
         protected ParticleEmitter rainParticleEmitter;
@@ -142,11 +144,12 @@ namespace Graphics3D
 
             // Create weather particles
             maxParticles = 400;
+            rainInterval = 30.0f;
             rainDelta = 5.0f;
             rainTimer = rainDelta;
             rainParticleEmitter = new ParticleEmitter(device, content, Vector3.Zero,
                 content.Load<Texture2D>(@"Textures\rain_drop"), new RainParticleUpdater(),
-                maxParticles, 2.0f);
+                maxParticles, 1.25f);
 
             // Create ambient particles
             ambientParticleEmitter1 = new ParticleEmitter(device, content, Vector3.Zero,
@@ -765,9 +768,22 @@ namespace Graphics3D
         {
             Vector3 rainDirection = Vector3.Normalize(new Vector3(0.025f, -1.0f, 0.035f));
             Vector2 rainSize = new Vector2(0.5f, 5.0f + (float)rand.NextDouble());
+            float rainSpeed = 5.0f;
 
             float skySpeed = 0.25f;
             float fogSpeed = 200.0f;
+
+            // Possibly toggle rain on each interval
+            if (rainIntervalTimer <= 0.0f)
+            {
+                // Enable/Disable rain
+                rainEnabled = rand.NextDouble() <= 0.25;
+                rainIntervalTimer = rainInterval;
+            }
+            else
+            {
+                rainIntervalTimer -= dt;
+            }
 
             // Update weather sky color and amount
             if (rainEnabled)
@@ -829,7 +845,7 @@ namespace Graphics3D
             rainParticleEmitter.Position = camera.Position;
 
             // Emit particles
-            rainParticleEmitter.EmitParticles(numRainParticlesToEmit, rainDirection, rainSize, 2.25f);
+            rainParticleEmitter.EmitParticles(numRainParticlesToEmit, rainDirection, rainSize, rainSpeed);
 
             // Update emitters
             rainParticleEmitter.Update(dt);

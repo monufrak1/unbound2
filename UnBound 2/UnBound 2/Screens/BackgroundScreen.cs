@@ -170,6 +170,8 @@ namespace GameStateManagement
 
             // Create sound players
             level.AmbientSFX.Play();
+            level.WeatherSFX.Play();
+            level.WaterSFX.Play();
 
             level.DayNightCycleSpeed = 0.1f;
 
@@ -235,6 +237,7 @@ namespace GameStateManagement
 
             meshRenderer.UpdateEffectVariables();
             billboardRenderer.UpdateEffectVariables();
+            orbRenderer.UpdateEffectVariables();
         }
 
         public override void Draw(GameTime gameTime)
