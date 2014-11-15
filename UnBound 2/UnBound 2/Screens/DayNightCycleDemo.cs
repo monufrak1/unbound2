@@ -355,9 +355,10 @@ namespace GameStateManagement
             camera.Update(dt);
 
             // Start jump
-            if (!isJumping && !jumpButtonPressed && !isSliding && !(isSwimming && !ActivePlayer.Profile.IsSwimSkillUnlocked()) &&
-                ((keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space)) ||
-                (gamePadState.IsButtonDown(Buttons.A) && prevGamePadState.IsButtonUp(Buttons.A))))
+            if (!isJumping && !jumpButtonPressed && !isSliding
+                && !(isSwimming && !ActivePlayer.Profile.IsSwimSkillUnlocked())
+                && ((keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
+                || (gamePadState.IsButtonDown(Buttons.A) && prevGamePadState.IsButtonUp(Buttons.A))))
             {
                 jumpButtonPressed = true;
             }
@@ -368,7 +369,7 @@ namespace GameStateManagement
                 gamePadState.IsButtonDown(Buttons.A)))
             {
                 jumpTimer += dt;
-            }   
+            }
 
             // Jump button is released
             float maxJumpTime = 0.15f;
@@ -408,6 +409,7 @@ namespace GameStateManagement
                 (keyboardState.IsKeyDown(Keys.LeftControl) || 
                  gamePadState.IsButtonDown(Buttons.B)))
             {
+                jumpVelocity = Vector3.Add(jumpVelocity*0.5f, camera.Look);
                 jumpVelocity.Y = -maxJumpStrength;
                 jumpCanceled = true;
             }

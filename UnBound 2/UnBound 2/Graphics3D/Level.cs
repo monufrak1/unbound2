@@ -777,7 +777,7 @@ namespace Graphics3D
             if (rainIntervalTimer <= 0.0f)
             {
                 // Enable/Disable rain
-                rainEnabled = rand.NextDouble() <= 0.25;
+                rainEnabled = rand.NextDouble() <= 0.1;
                 rainIntervalTimer = rainInterval;
             }
             else

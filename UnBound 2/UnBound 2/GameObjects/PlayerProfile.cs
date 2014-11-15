@@ -671,6 +671,11 @@ namespace GameObjects
             return (float)skillValues[Array.IndexOf(skillLevels, jumpSkill)];
         }
 
+        public bool IsDoubleJumpUnlocked()
+        {
+            return true;
+        }
+
         public bool IsSwimSkillUnlocked()
         {
             return swimSkill == SwimSkillLevel.Unlocked;
