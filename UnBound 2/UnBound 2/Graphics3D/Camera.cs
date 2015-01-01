@@ -486,7 +486,19 @@ namespace Graphics3D
 
         public Vector3 MoveDirection
         {
-            get { return moveDirection; }
+            get
+            {
+                if (float.IsNaN(moveDirection.X) || float.IsNaN(moveDirection.Y) ||
+                    float.IsNaN(moveDirection.Z))
+                {
+                    // Move direction was invalid
+                    return Vector3.Zero;
+                }
+                else
+                {
+                    return moveDirection;
+                }
+            }
         }
 
         public float PitchAngle

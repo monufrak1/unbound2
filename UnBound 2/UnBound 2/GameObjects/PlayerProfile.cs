@@ -696,6 +696,16 @@ namespace GameObjects
             get { return medalList; }
         }
 
+        public JumpSkillLevel JumpSkill
+        {
+            get { return jumpSkill; }
+        }
+
+        public SpeedSkillLevel SpeedSkill
+        {
+            get { return speedSkill; }
+        }
+
         // SETTINGS
         public bool IsLoggedIn
         {

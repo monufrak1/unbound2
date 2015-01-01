@@ -74,6 +74,8 @@ namespace GameStateManagement
         float jumpTimer;
         float jumpAmount;
         Vector3 jumpVelocity;
+        int jumpCount;
+        int maxJumps;
 
         UnboundLevel level;
 
@@ -282,6 +284,7 @@ namespace GameStateManagement
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             maxJumpStrength = ActivePlayer.Profile.CurrentJumpStrength();
+            maxJumps = (int)ActivePlayer.Profile.JumpSkill + 1;
             cameraMoveSpeed = camera.FreeFlyEnabled ? 350.0f : ActivePlayer.Profile.CurrentMoveSpeed();
             cameraSwimSpeed = cameraMoveSpeed / 2.0f;
 
@@ -355,7 +358,7 @@ namespace GameStateManagement
             camera.Update(dt);
 
             // Start jump
-            if (!isJumping && !jumpButtonPressed && !isSliding
+            if ((jumpCount < maxJumps) && !jumpButtonPressed && !isSliding
                 && !(isSwimming && !ActivePlayer.Profile.IsSwimSkillUnlocked())
                 && ((keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
                 || (gamePadState.IsButtonDown(Buttons.A) && prevGamePadState.IsButtonUp(Buttons.A))))
@@ -382,20 +385,21 @@ namespace GameStateManagement
                 jumpStrength = maxJumpStrength * (jumpTimer / maxJumpTime);
                 jumpTimer = 0.0f;
                 jumpButtonPressed = false;
-            }
 
-            if (!isJumping && jumpStrength > 0)
-            {
-                if (float.IsNaN(camera.MoveDirection.X) || float.IsNaN(camera.MoveDirection.Y) ||
-                    float.IsNaN(camera.MoveDirection.Z))
-                {
-                    jumpVelocity = Vector3.Zero;
-                }
-                else
+                // Apply extra jump strength
+                if (jumpCount > 0 && !jumpCanceled)
                 {
                     jumpVelocity = camera.MoveDirection;
+                    jumpVelocity.Y += jumpStrength / (jumpCount);
                 }
 
+                jumpCount++;
+            }
+
+            // Apply initial jump strength
+            if (!isJumping && jumpStrength > 0)
+            {
+                jumpVelocity = camera.MoveDirection;
                 jumpVelocity.Y = jumpStrength;              // Jump strength
                 jumpAmount = cameraMoveSpeed;
 
@@ -436,6 +440,8 @@ namespace GameStateManagement
                         isSwimming = true;
                         jumpStrength = 0;
 
+                        jumpCount = 0;
+
                         // Play landing SFX
                         jumpSplashSFX.Play();
                     }
@@ -444,6 +450,8 @@ namespace GameStateManagement
                         isJumping = false;
                         isSwimming = false;
                         jumpStrength = 0;
+
+                        jumpCount = 0;
 
                         // Play landing SFX
                         jumpLandingSFX.Play();
@@ -574,7 +582,7 @@ namespace GameStateManagement
             {
                 if (displayFPS)
                 {
-                    spriteBatch.DrawString(font, fps.ToString(),
+                    spriteBatch.DrawString(font, fps.ToString() + " " + jumpButtonPressed + " " + jumpCount,
                         new Vector2(screenWidth * 0.05f, screenHeight * 0.05f), Color.Yellow);
                 }
 
