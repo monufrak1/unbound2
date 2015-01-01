@@ -436,6 +436,10 @@ namespace GameObjects
             medalRequirements.Add(title, 10);
             AddMedal(title, "Collect " + medalRequirements[title] + " orbs");
 
+            title = "Radical Hangtime";
+            medalRequirements.Add(title, 5);
+            AddMedal(title, "Stay airborn for over " + medalRequirements[title] + " seconds");
+
             AddMedal("Nice to meet you", "???");
 
             AddMedal("UnBound", 
@@ -453,8 +457,8 @@ namespace GameObjects
             AddMedal("Master Orchestrator", "D-Mav on the Mic!");
 
             AddMedal("Master Medal", 
-                "Unlock every Medal in" + "\n" +
-                "ShootOut Reloaded");
+                "Unlock every Medal" + "\n" +
+                "in UnBound 2");
         }
 
         public void UnlockMedal(string medalTitle)
